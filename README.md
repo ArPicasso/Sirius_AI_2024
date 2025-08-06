@@ -1,42 +1,42 @@
-# **Сириус ИИ** Весна 2024
+# **Sirius AI** Spring 2024
 
 <p float="left">
   <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/logo1.png" width="300" />
   <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/logo2.png" width="150" />
 </p>
 
-## Инструмент для анализа клиентских отзывов
+## A Tool for Analyzing Customer Reviews
 
-### Проектная команда:
+### Project Team:
 
-- Кончаков Павел
-- Григорьев Илья
-- Аксенов Владимир
-- Дырков Дмитрий
+- Konchakov Pavel (Me)
+- Grigoryev Ilya
+- Aksenov Vladimir
+- Dyrkov Dmitry
 
 ________
 
-# 1 Этап
+# Phase 1
 
-Для первого этапа мы решили использовать модель **zephyr beta 7B Q4_K_S**
+For the first stage, we chose to use the **zephyr beta 7B Q4_K_S** model.
 
-Мы запускаем ее в **LM Studio**, а потом уже в программе на языке программирования **python** обращаемся к серверу.
+We launch it in **LM Studio**, and then connect to it from our Python program via the local server.
 
-## Демонстрация работы
+## Demo
 
 <p float="left">
   <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/im4.png" width="500" />
   <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img5.png" width="500" />
 </p>
 
-## Результат
+## Result
 
 <p float="left">
   <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img6.png" width="500" />
   <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img7.png" width="500" />
 </p>
 
-## Видеодемострация работы для первого этапа
+## Video Demo for Phase 1
 
 <p float="left">
   <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/qr.png" width="300" />
@@ -44,72 +44,81 @@ ________
 
 ________________________________
 
-# 2 Этап
-### Вот второй этап опишем подробно
-## План реализации 
-1. Сбор информации
-2. Чистим от лишнего и структурируем собранные данные для последующего анализа
-3. Извлечение признаков
+# Phase 2
 
-## Сбор информации
-### Для сбора информации мы использовали 2 вида парсерова с 2 источников
+### Below is a detailed description of Phase 2
 
-Colons can be used to align columns.
+## Implementation Plan:
+1. Data collection
+2. Cleaning and structuring the data for analysis
+3. Feature extraction
 
-|   Сайт           | banki.ru            | sravni.ru                            |
-| -------------    |:-------------:      | :-----:                               |
-| Что использовали?| **bs4** и **urlib** | **selenium** и **webdriver_manager** |
-| Как работает?    | Просто через **get** запросы     | Ходим по сайт через **ChromeDriver** и нажимем на кнопки |
+## Data Collection
+
+### We used two types of parsers from two sources:
+
+| Website         | banki.ru             | sravni.ru                             |
+|----------------|:--------------------:|:-------------------------------------:|
+| Tools Used     | **bs4** and **urllib** | **selenium** and **webdriver_manager** |
+| How It Works   | Simple **GET** requests | Automated browsing with **ChromeDriver** |
 
 <p float="left">
   <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img8.png" width="450" />
   <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img9.png" width="550" />
 </p>
 
-## Обработка информации 
-+ Парсер banki.ru потребовал дополнительную чистку от 
-HTML-cимволов для чистки.
-+ Парсер sravni.ru устроен так, что после парсинга не требуется дополнительная чистка.
+## Data Processing
+
++ The banki.ru parser required additional HTML character cleanup.
++ The sravni.ru parser outputs clean data, so no post-processing was needed.
 
 <p float="left">
   <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img10.png" width="500" />
   <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img11.png" width="500" />
 </p>
 
-## Извлечение признаков
-+ Провели предварительную обработку текстов: удаление стоп-слов, лемматизацию / стемминг, удаление пунктуации. 
+## Feature Extraction
+
++ We performed text preprocessing: stopword removal, lemmatization/stemming, punctuation removal.
 
 <p float="left">
   <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img12.png" width="1000" />
 </p>
 
-+ Преобразовали собранные тексты отзывов в векторное представление с использованием методов NLP, таких как TF-IDF. 
++ Converted review texts into vector representations using NLP techniques such as TF-IDF.
 
 <p float="left">
   <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img13.png" width="1000" />
 </p>
 
-## Анализ и интерпретация отзывов
-+ Использовали полученные признаки для выявления общих тем и тенденций в собранных отзывах. Сделали векторизацию на 10 кластеров. Анализа настроений нет - там надо применять что-то посерьезней ,хотя бы модель типа bert, появляются сложности с русским языком. 
-Такой анализ в HTML-формате генерирует наша программа(только не 4, а 10 кластеров).
+## Review Analysis & Interpretation
 
-### Подробнее о всех этапах нашей работы вы можете узнать в файл **presentationforsirius.pdf**
++ Using the extracted features, we identified topics and trends in the reviews. We performed clustering into 10 clusters.
++ Sentiment analysis was **not** performed — it requires more advanced models like BERT, and handling Russian language adds complexity.
+
+This analysis is exported as an HTML file by our program (clustering by 10 topics instead of 4).
+
+### For more details, see the **presentationforsirius.pdf** file
 
 ______
 
-# Вывод
-### Ждем встречи 1 апреля в 13:00!
+# Conclusion
+
+### See you on April 1st at 13:00!
 
 _____
-# Содержание репозитория
-+ fo_sir_tink - все файлы первого этапа, в которые входят:
-  + req.txt - requierments
-  + localSemantic.py - анализ семантики и распределения всех отзывов на положительные и отрицательные
-  + table_excel_load.py - загрузка отзывов в таблицу excel
-  + wordcloud_base.py - создание облаков слов
-+ second_stage - все файлы второго этапа, а именно:
-  + level2 - папка, содержащая парсер с сайта **sravni.ru** а также 4 тестовых питон файла
-  + theme5.ipynb - блокнот jupiter notebook с парсером для **banki.ru** а также стемминг и лемматизация
-  + LICENSE.chromedriver - лицензия для запуска парсера **sravni.ru**
-+ img - папка с фотографиями для файла README.md
-+ presentationforsirius.pdf - наша презентация
+# Repository Contents
+
++ `fo_sir_tink` — all files for Phase 1, including:
+  + `req.txt` — requirements
+  + `localSemantic.py` — semantic analysis and sentiment separation
+  + `table_excel_load.py` — exporting reviews to Excel
+  + `wordcloud_base.py` — word cloud generation
+
++ `second_stage` — all files for Phase 2:
+  + `level2/` — parser for **sravni.ru** and test Python scripts
+  + `theme5.ipynb` — Jupyter notebook with **banki.ru** parser and text processing
+  + `LICENSE.chromedriver` — license for ChromeDriver used in sravni.ru parsing
+
++ `img/` — images used in README
++ `presentationforsirius.pdf` — project presentation
