@@ -7,7 +7,7 @@ A student team project from the **Sirius.AI programme, Spring 2024**. The task: 
 <p>
   <img src="img/logo1.png" height="56" alt="Sirius.AI logo">
   &nbsp;&nbsp;
-  <img src="img/logo2.png" height="56" alt="Team logo">
+  <img src="img/logo2.png" height="56" alt="Logo of the partner bank">
 </p>
 
 ## What it does
@@ -41,7 +41,7 @@ Sentiment was only scored in the first stage. For the clustering stage we decide
   <img src="second_stage/level2/cluster_0_wordcloud.png" width="49%" alt="Word cloud of one topic cluster">
 </p>
 
-## Team and my role
+## Team
 
 A team of four:
 
