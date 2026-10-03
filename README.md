@@ -1,124 +1,98 @@
-# **Sirius AI** Spring 2024
+<img src="img/banner.png" width="100%" alt="Sirius.AI Spring 2024: Review Analysis Tool">
 
-<p float="left">
-  <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/logo1.png" width="300" />
-  <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/logo2.png" width="150" />
+# Review Analysis Tool
+
+A student team project from the **Sirius.AI programme, Spring 2024**. The task: give a bank a way to read thousands of customer reviews without reading them one by one. The tool collects reviews from public review sites, scores how positive each one is, and groups them into topics so recurring complaints become visible.
+
+<p>
+  <img src="img/logo1.png" height="56" alt="Sirius.AI logo">
+  &nbsp;&nbsp;
+  <img src="img/logo2.png" height="56" alt="Team logo">
 </p>
 
-## A Tool for Analyzing Customer Reviews
+## What it does
 
-### Project Team:
+| Stage | What happens | Where |
+|:--|:--|:--|
+| **Collect** | Reviews are scraped from banki.ru (plain GET requests, BeautifulSoup) and sravni.ru (Selenium with ChromeDriver, because the page loads reviews on scroll). | `second_stage/theme5.ipynb`, `second_stage/level2/sravnyParser.py` |
+| **Clean** | HTML control characters are stripped, text is lower-cased, punctuation and Russian stop words removed, words stemmed. | `second_stage/theme5.ipynb`, `second_stage/level2/Main.py` |
+| **Score sentiment** | Each review is sent to a locally hosted LLM, which answers with a score from 1 to 100. Reviews at 80 and above count as positive. | `fo_sir_tink/localSemantic.py` |
+| **Find topics** | Reviews are vectorised with TF-IDF and clustered into 10 groups with KMeans. For each cluster the tool picks the most central review, the five closest ones and a word cloud. | `second_stage/level2/Main.py` |
+| **Report** | Results are written to an HTML report, an Excel sheet and word-cloud images. | `second_stage/level2/cluster_analysis.html`, `fo_sir_tink/weutput.xlsx` |
 
-- Konchakov Pavel (Me)
-- Grigoryev Ilya
-- Aksenov Vladimir
-- Dyrkov Dmitry
-
-________
-
-# Phase 1
-
-For the first stage, we chose to use the **zephyr beta 7B Q4_K_S** model.
-
-We launch it in **LM Studio**, and then connect to it from our Python program via the local server.
-
-## Demo
-
-<p float="left">
-  <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/im4.png" width="500" />
-  <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img5.png" width="500" />
-</p>
+The first stage used the **Zephyr 7B beta (Q4_K_S)** model, served locally by LM Studio and called from Python through its OpenAI-compatible endpoint. No review text leaves the machine.
 
 ## Result
 
-<p float="left">
-  <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img6.png" width="500" />
-  <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img7.png" width="500" />
+The repository contains the finished output of a run on 100 reviews from sravni.ru:
+
+- `second_stage/level2/cluster_analysis.html`: the topic report, one section per cluster
+- `second_stage/level2/cluster_*_wordcloud.png`: a word cloud for each of the 10 clusters
+- `presentationforsirius.pdf`: the 22-slide project presentation (in Russian)
+
+Sentiment was only scored in the first stage. For the clustering stage we decided against it: doing it well for Russian text needs a BERT-class model, which was out of scope.
+
+<p>
+  <img src="img/img6.png" width="49%" alt="Word clouds for positive and negative reviews">
+  <img src="img/img7.png" width="49%" alt="Sentiment output of the first stage">
+</p>
+<p>
+  <img src="img/img12.png" width="100%" alt="Text preprocessing output">
 </p>
 
-## Video Demo for Phase 1
+## Team and my role
 
-<p float="left">
-  <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/qr.png" width="300" />
-</p>
+A team of four:
 
-________________________________
+- Pavel Konchakov (me)
+- Ilya Grigoryev
+- Vladimir Aksenov
+- Dmitry Dyrkov
 
-# Phase 2
+## Stack
 
-### Below is a detailed description of Phase 2
+Python · pandas · scikit-learn (TF-IDF, KMeans) · NLTK · wordcloud · matplotlib · Selenium · BeautifulSoup · FastAPI · LM Studio with Zephyr 7B
 
-## Implementation Plan:
-1. Data collection
-2. Cleaning and structuring the data for analysis
-3. Feature extraction
+## How to run
 
-## Data Collection
+**Topic clustering (works offline, data included)**
 
-### We used two types of parsers from two sources:
+```bash
+cd second_stage/level2
+pip install pandas numpy scikit-learn nltk wordcloud matplotlib
+python Main.py          # reads sravni.json, writes cluster_analysis.html and the word clouds
+```
 
-| Website         | banki.ru             | sravni.ru                             |
-|----------------|:--------------------:|:-------------------------------------:|
-| Tools Used     | **bs4** and **urllib** | **selenium** and **webdriver_manager** |
-| How It Works   | Simple **GET** requests | Automated browsing with **ChromeDriver** |
+**Sentiment scoring (needs a local model)**
 
-<p float="left">
-  <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img8.png" width="450" />
-  <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img9.png" width="550" />
-</p>
+1. Install [LM Studio](https://lmstudio.ai), download `zephyr-7b-beta` (Q4_K_S) and start the local server on port 1234.
+2. Run the script:
 
-## Data Processing
+```bash
+cd fo_sir_tink
+pip install pandas numpy matplotlib seaborn wordcloud fastapi openpyxl "openai<1"
+python localSemantic.py   # reads samples.csv, writes positive_reviews.txt and negative_reviews.txt
+```
 
-+ The banki.ru parser required additional HTML character cleanup.
-+ The sravni.ru parser outputs clean data, so no post-processing was needed.
+`table_excel_load.py` exports the reviews with the detected problems to Excel, `wordcloud_base.py` builds the word clouds only.
 
-<p float="left">
-  <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img10.png" width="500" />
-  <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img11.png" width="500" />
-</p>
+**Scraping fresh reviews**
 
-## Feature Extraction
+```bash
+cd second_stage/level2
+pip install selenium webdriver-manager
+python sravnyParser.py    # opens Chrome and collects 100 reviews into sravni.json
+```
 
-+ We performed text preprocessing: stopword removal, lemmatization/stemming, punctuation removal.
+The scrapers depend on the markup of the review sites as it was in March 2024 and may need new selectors today.
 
-<p float="left">
-  <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img12.png" width="1000" />
-</p>
+## Repository layout
 
-+ Converted review texts into vector representations using NLP techniques such as TF-IDF.
-
-<p float="left">
-  <img src="https://github.com/z1nex-1/Sirius_AI/blob/main/img/img13.png" width="1000" />
-</p>
-
-## Review Analysis & Interpretation
-
-+ Using the extracted features, we identified topics and trends in the reviews. We performed clustering into 10 clusters.
-+ Sentiment analysis was **not** performed — it requires more advanced models like BERT, and handling Russian language adds complexity.
-
-This analysis is exported as an HTML file by our program (clustering by 10 topics instead of 4).
-
-### For more details, see the **presentationforsirius.pdf** file
-
-______
-
-# Conclusion
-
-### See you on April 1st at 13:00!
-
-_____
-# Repository Contents
-
-+ `fo_sir_tink` — all files for Phase 1, including:
-  + `req.txt` — requirements
-  + `localSemantic.py` — semantic analysis and sentiment separation
-  + `table_excel_load.py` — exporting reviews to Excel
-  + `wordcloud_base.py` — word cloud generation
-
-+ `second_stage` — all files for Phase 2:
-  + `level2/` — parser for **sravni.ru** and test Python scripts
-  + `theme5.ipynb` — Jupyter notebook with **banki.ru** parser and text processing
-  + `LICENSE.chromedriver` — license for ChromeDriver used in sravni.ru parsing
-
-+ `img/` — images used in README
-+ `presentationforsirius.pdf` — project presentation
+```
+fo_sir_tink/            Stage 1: sentiment scoring with a local LLM, Excel export, word clouds
+second_stage/
+  theme5.ipynb          Stage 2 notebook: banki.ru scraper, merging and cleaning
+  level2/               Stage 2 scripts: sravni.ru scraper, clustering, generated report
+img/                    Screenshots used in this README
+presentationforsirius.pdf
+```
