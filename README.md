@@ -33,11 +33,12 @@ The repository contains the finished output of a run on 100 reviews from sravni.
 Sentiment was only scored in the first stage. For the clustering stage we decided against it: doing it well for Russian text needs a BERT-class model, which was out of scope.
 
 <p>
-  <img src="img/img6.png" width="49%" alt="Word clouds for positive and negative reviews">
-  <img src="img/img7.png" width="49%" alt="Sentiment output of the first stage">
+  <img src="img/im4.png" width="49%" alt="LM Studio serving the model on a local port">
+  <img src="img/img7.png" width="49%" alt="Table with the problem the model extracted from each review">
 </p>
 <p>
-  <img src="img/img12.png" width="100%" alt="Text preprocessing output">
+  <img src="img/img11.png" width="49%" alt="Merged table of reviews from both sources">
+  <img src="second_stage/level2/cluster_0_wordcloud.png" width="49%" alt="Word cloud of one topic cluster">
 </p>
 
 ## Team and my role
